@@ -1,0 +1,55 @@
+# ══════════════════════════════════════════════
+#  💎 ONYX SELF V.11 — .gitignore
+#  هیچ‌وقت این فایل‌ها را Commit نکنید!
+# ══════════════════════════════════════════════
+
+# ── Telegram Session Files ────────────────────
+*.session
+*.session-journal
+
+# ── Local Configuration (contains credentials) ─
+config.ini
+.env
+.env.*
+
+# ── Logs ──────────────────────────────────────
+logs/
+*.log
+
+# ── Database (شامل داده‌های حساس) ─────────────
+*.db
+*.db-shm
+*.db-wal
+
+# ── Downloads & Cache ─────────────────────────
+downloads/
+backups/
+vault/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# ── Virtual Environment ───────────────────────
+venv/
+env/
+.venv/
+.env/
+
+# ── OS Files ──────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── IDE ───────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ── Temporary Files ───────────────────────────
+tmp/
+temp/
+*.tmp
+*.bak
