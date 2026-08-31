@@ -52,13 +52,13 @@ ONYX مجموعه‌ای از قابلیت‌های مختلف را در اخت�
 ابتدا Repository را دریافت کنید:
 
 ```bash
-git clone آدرس-مخزن-گیتهاب
+git clone https://github.com/ONYXSELFBOT/ONYX-SELF-TELEGRAM.git
 ```
 
 و وارد پوشه پروژه شوید:
 
 ```bash
-cd نام-پروژه
+cd ONYX-SELF-TELEGRAM
 ```
 
 ---
@@ -68,7 +68,7 @@ cd نام-پروژه
 فایل اصلی را اجرا کنید:
 
 ```bash
-python main_v11.py
+python main.py
 ```
 
 در اولین اجرا، سلف به‌صورت خودکار متوجه می‌شود که هنوز تنظیم نشده است و **Setup Wizard** را اجرا می‌کند.
