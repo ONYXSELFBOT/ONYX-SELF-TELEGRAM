@@ -179,7 +179,7 @@ python main.py --setup
 6. در صورت نیاز Setup را دوباره اجرا کنید:
 
 ```bash
-python main_v11.py --setup
+python main.py --setup
 ```
 
 ---
