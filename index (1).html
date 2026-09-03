@@ -1,0 +1,1598 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ONYX SELF | سلف‌بات هوشمند و قابل شخصی‌سازی تلگرام</title>
+<meta name="description" content="ONYX SELF یک سلف‌بات پیشرفته برای تلگرام با قابلیت‌های مدیریتی، CRM، فروش، اتوماسیون، ابزارهای هوشمند و Local Control Tower است.">
+<meta name="keywords" content="ONYX SELF, سلف‌بات تلگرام, Telegram selfbot, اتوماسیون تلگرام, CRM تلگرام">
+<meta property="og:title" content="ONYX SELF | سلف‌بات هوشمند تلگرام">
+<meta property="og:description" content="سلف‌بات قدرتمند، هوشمند و قابل شخصی‌سازی برای تلگرام">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/iran-yekan-font@v8.0.1/dist/font-face.css" rel="stylesheet">
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'IRANYekan', 'Tahoma', sans-serif;
+  background: #0a0b0d;
+  color: #e2e8f0;
+  line-height: 1.8;
+  overflow-x: hidden;
+  direction: rtl;
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  #bg-canvas { display: none; }
+}
+
+/* ===== CANVAS BACKGROUND ===== */
+#bg-canvas {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none; z-index: 0;
+  opacity: 0.35;
+}
+
+/* ===== TYPOGRAPHY ===== */
+h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; line-height: 1.25; }
+h2 { font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 700; line-height: 1.35; }
+h3 { font-size: clamp(1.1rem, 2vw, 1.4rem); font-weight: 700; }
+h4 { font-size: 1.05rem; font-weight: 600; }
+p { color: #94a3b8; max-width: 68ch; }
+a { color: inherit; text-decoration: none; }
+code, pre { font-family: 'Courier New', monospace; direction: ltr; }
+
+/* ===== LAYOUT ===== */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; position: relative; z-index: 1; }
+section { padding: 5rem 0; position: relative; z-index: 1; }
+
+/* ===== COLORS ===== */
+:root {
+  --blue: #2481cc;
+  --blue-light: #3b9de1;
+  --blue-dim: rgba(36,129,204,0.12);
+  --surface: #111318;
+  --surface-2: #161a22;
+  --border: rgba(255,255,255,0.07);
+  --text: #e2e8f0;
+  --muted: #64748b;
+  --green: #22c55e;
+  --orange: #f59e0b;
+  --red: #ef4444;
+}
+
+/* ===== NAVBAR ===== */
+#navbar {
+  position: fixed; top: 0; right: 0; left: 0; z-index: 1000;
+  background: rgba(10,11,13,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.3s;
+}
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 60px; padding: 0 1.5rem; max-width: 1200px; margin: 0 auto;
+}
+.nav-logo {
+  font-size: 1.15rem; font-weight: 800; color: #fff;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.nav-logo span { color: var(--blue-light); }
+.nav-links {
+  display: flex; align-items: center; gap: 0.25rem; list-style: none;
+}
+.nav-links a {
+  font-size: 0.82rem; color: #94a3b8; padding: 0.35rem 0.65rem;
+  border-radius: 6px; transition: color 0.2s, background 0.2s;
+  white-space: nowrap;
+}
+.nav-links a:hover, .nav-links a.active { color: #fff; background: var(--blue-dim); }
+.nav-cta {
+  font-size: 0.82rem; background: var(--blue); color: #fff !important;
+  padding: 0.4rem 1rem !important; border-radius: 7px !important;
+  transition: background 0.2s !important;
+}
+.nav-cta:hover { background: var(--blue-light) !important; }
+#menu-toggle {
+  display: none; background: none; border: none; cursor: pointer;
+  color: #fff; font-size: 1.4rem; padding: 0.25rem;
+}
+#mobile-menu {
+  display: none; flex-direction: column; gap: 0.25rem;
+  padding: 1rem 1.5rem; border-top: 1px solid var(--border);
+  background: rgba(10,11,13,0.97);
+}
+#mobile-menu a {
+  font-size: 0.9rem; color: #94a3b8; padding: 0.5rem 0.75rem;
+  border-radius: 6px; display: block;
+}
+#mobile-menu a:hover { color: #fff; background: var(--blue-dim); }
+#mobile-menu.open { display: flex; }
+
+/* ===== HERO ===== */
+#hero {
+  min-height: 100vh; display: flex; align-items: center;
+  padding-top: 60px;
+}
+.hero-inner {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 4rem; align-items: center; padding: 4rem 0;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: var(--blue-dim); border: 1px solid rgba(36,129,204,0.25);
+  padding: 0.35rem 0.9rem; border-radius: 20px;
+  font-size: 0.78rem; color: var(--blue-light); margin-bottom: 1.5rem;
+}
+.hero-title { color: #fff; margin-bottom: 1.25rem; }
+.hero-title .brand { color: var(--blue-light); display: block; }
+.hero-desc { font-size: 1.05rem; color: #94a3b8; margin-bottom: 2rem; max-width: 50ch; }
+.hero-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.65rem 1.4rem; border-radius: 8px; font-size: 0.9rem;
+  font-family: inherit; font-weight: 600; cursor: pointer;
+  border: none; transition: all 0.2s;
+}
+.btn-primary { background: var(--blue); color: #fff; }
+.btn-primary:hover { background: var(--blue-light); transform: translateY(-1px); }
+.btn-outline { background: transparent; color: #cbd5e1; border: 1px solid var(--border); }
+.btn-outline:hover { background: var(--surface); color: #fff; border-color: rgba(255,255,255,0.15); }
+.btn-ghost { background: transparent; color: #94a3b8; padding: 0.65rem 1rem; }
+.btn-ghost:hover { color: #fff; }
+
+/* Terminal Mockup */
+.terminal-wrap {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.terminal-bar {
+  background: #1a1f2e; padding: 0.7rem 1rem;
+  display: flex; align-items: center; gap: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.t-dot { width: 11px; height: 11px; border-radius: 50%; }
+.t-dot.r { background: #ef4444; } .t-dot.y { background: #f59e0b; } .t-dot.g { background: #22c55e; }
+.t-title { font-size: 0.75rem; color: var(--muted); margin-right: auto; margin-left: auto; }
+.terminal-body { padding: 1.25rem 1.5rem; direction: ltr; }
+.t-line { font-size: 0.82rem; line-height: 2; color: #94a3b8; }
+.t-line .t-cmd { color: var(--blue-light); }
+.t-line .t-green { color: var(--green); }
+.t-line .t-dim { color: #475569; }
+.t-line .t-white { color: #e2e8f0; }
+.t-line .t-orange { color: var(--orange); }
+.t-blink { animation: blink 1s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* ===== SECTION LABELS ===== */
+.section-label {
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em;
+  color: var(--blue-light); text-transform: uppercase;
+  margin-bottom: 0.75rem; display: block;
+}
+.section-title { color: #fff; margin-bottom: 1rem; }
+.section-desc { font-size: 1.05rem; margin-bottom: 3rem; }
+
+/* ===== DIVIDER ===== */
+.divider { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+/* ===== INTRO SECTION ===== */
+.intro-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+.intro-points { list-style: none; display: flex; flex-direction: column; gap: 0.9rem; }
+.intro-points li {
+  display: flex; align-items: flex-start; gap: 0.75rem;
+  font-size: 0.92rem; color: #cbd5e1;
+}
+.intro-points li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; margin-top: 0.1rem; }
+
+/* ===== WHY SECTION ===== */
+.why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2.5rem; }
+.why-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 1.5rem;
+  transition: border-color 0.2s;
+}
+.why-card:hover { border-color: rgba(36,129,204,0.3); }
+.why-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
+.why-card h4 { color: #fff; margin-bottom: 0.4rem; }
+.why-card p { font-size: 0.88rem; }
+
+/* ===== FEATURES ===== */
+.features-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+.tab-btn {
+  font-family: inherit; font-size: 0.82rem; font-weight: 600;
+  padding: 0.4rem 0.9rem; border-radius: 6px; cursor: pointer;
+  border: 1px solid var(--border); background: transparent; color: #94a3b8;
+  transition: all 0.2s;
+}
+.tab-btn:hover { color: #fff; border-color: rgba(255,255,255,0.15); }
+.tab-btn.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+.tab-panel { display: none; }
+.tab-panel.active { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+.feat-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 1.25rem;
+  transition: border-color 0.2s, background 0.2s;
+}
+.feat-card:hover { border-color: rgba(36,129,204,0.25); background: var(--surface-2); }
+.feat-icon { font-size: 1.3rem; margin-bottom: 0.6rem; }
+.feat-card h4 { color: #e2e8f0; margin-bottom: 0.35rem; font-size: 0.95rem; }
+.feat-card p { font-size: 0.82rem; color: #64748b; max-width: none; }
+
+/* ===== INSTALL SECTION ===== */
+.install-steps { display: flex; flex-direction: column; gap: 2.5rem; margin-top: 2rem; }
+.install-step { display: grid; grid-template-columns: 48px 1fr; gap: 1.25rem; }
+.step-num {
+  width: 48px; height: 48px; border-radius: 10px;
+  background: var(--blue-dim); border: 1px solid rgba(36,129,204,0.25);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; color: var(--blue-light); font-size: 1rem;
+  flex-shrink: 0;
+}
+.step-content h3 { color: #fff; margin-bottom: 0.4rem; }
+.step-content p { font-size: 0.92rem; margin-bottom: 0.75rem; }
+
+/* Code Block */
+.code-block {
+  background: #0d1117; border: 1px solid #21262d;
+  border-radius: 8px; overflow: hidden; margin-top: 0.5rem;
+  direction: ltr;
+}
+.code-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.5rem 0.9rem; background: #161b22;
+  border-bottom: 1px solid #21262d;
+}
+.code-lang { font-size: 0.72rem; color: #64748b; font-family: monospace; }
+.copy-btn {
+  font-family: inherit; font-size: 0.72rem; color: #64748b;
+  background: none; border: 1px solid #30363d; padding: 0.25rem 0.6rem;
+  border-radius: 5px; cursor: pointer; transition: all 0.2s;
+  display: flex; align-items: center; gap: 0.3rem;
+}
+.copy-btn:hover { color: #fff; border-color: #58a6ff; }
+.copy-btn.copied { color: var(--green); border-color: var(--green); }
+.code-body { padding: 0.9rem 1rem; overflow-x: auto; }
+.code-body pre { font-size: 0.83rem; color: #c9d1d9; line-height: 1.7; }
+.code-body .prompt { color: var(--blue-light); user-select: none; }
+.code-body .cmd { color: #c9d1d9; }
+.code-body .cmt { color: #6e7681; }
+
+/* ===== TIMELINE ===== */
+.timeline { position: relative; padding-right: 1.5rem; margin-top: 2rem; }
+.timeline::before {
+  content: ''; position: absolute; right: 0; top: 0; bottom: 0;
+  width: 2px; background: var(--border);
+}
+.tl-item { position: relative; padding: 0 2rem 2rem 0; }
+.tl-item:last-child { padding-bottom: 0; }
+.tl-dot {
+  position: absolute; right: -6px; top: 4px;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--blue); border: 2px solid #0a0b0d;
+  box-shadow: 0 0 0 3px var(--blue-dim);
+}
+.tl-item h4 { color: #fff; margin-bottom: 0.25rem; }
+.tl-item p { font-size: 0.88rem; }
+
+/* ===== API SECTION ===== */
+.api-steps { display: flex; flex-direction: column; gap: 1.75rem; margin-top: 2rem; }
+.api-step {
+  display: flex; gap: 1rem; align-items: flex-start;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 1.25rem;
+}
+.api-step-num {
+  width: 32px; height: 32px; border-radius: 7px;
+  background: var(--blue); color: #fff; font-weight: 700; font-size: 0.85rem;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.api-step h4 { color: #fff; margin-bottom: 0.3rem; }
+.api-step p { font-size: 0.88rem; max-width: none; }
+.api-step a { color: var(--blue-light); text-decoration: underline; }
+
+/* ===== SECURITY WARNING ===== */
+.warning-box {
+  background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.25);
+  border-radius: 10px; padding: 1.5rem; margin-top: 1.5rem;
+}
+.warning-box h4 { color: #fca5a5; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+.warning-items { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
+.warning-items li { font-size: 0.88rem; color: #f87171; display: flex; align-items: center; gap: 0.5rem; }
+.warning-items li::before { content: '⚠'; font-size: 0.8rem; flex-shrink: 0; }
+.code-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+.code-bad, .code-good { border-radius: 8px; overflow: hidden; }
+.code-bad { border: 1px solid rgba(239,68,68,0.3); }
+.code-good { border: 1px solid rgba(34,197,94,0.3); }
+.code-bad-header, .code-good-header {
+  padding: 0.4rem 0.75rem; font-size: 0.75rem; font-weight: 700;
+}
+.code-bad-header { background: rgba(239,68,68,0.15); color: #fca5a5; }
+.code-good-header { background: rgba(34,197,94,0.1); color: #86efac; }
+.code-bad pre, .code-good pre { padding: 0.75rem; font-size: 0.8rem; background: #0d1117; color: #c9d1d9; direction: ltr; }
+
+/* ===== TABLE ===== */
+.req-table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; }
+.req-table th {
+  background: var(--surface); color: #94a3b8; font-size: 0.82rem;
+  font-weight: 600; text-align: right; padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.req-table td {
+  padding: 0.75rem 1rem; border-bottom: 1px solid var(--border);
+  font-size: 0.88rem; color: #cbd5e1;
+}
+.req-table tr:last-child td { border-bottom: none; }
+.req-table tr:hover td { background: var(--surface); }
+.badge { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+.badge-req { background: rgba(239,68,68,0.15); color: #fca5a5; }
+.badge-opt { background: rgba(245,158,11,0.15); color: #fcd34d; }
+
+/* ===== ACCORDION ===== */
+.accordion { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1.5rem; }
+.acc-item { background: var(--surface); border: 1px solid var(--border); border-radius: 9px; overflow: hidden; }
+.acc-header {
+  width: 100%; background: none; border: none; font-family: inherit;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 1.25rem; cursor: pointer; color: #e2e8f0; font-size: 0.92rem;
+  font-weight: 600; text-align: right; transition: background 0.2s;
+}
+.acc-header:hover { background: var(--surface-2); }
+.acc-arrow { color: #64748b; transition: transform 0.3s; flex-shrink: 0; }
+.acc-item.open .acc-arrow { transform: rotate(180deg); }
+.acc-body { display: none; padding: 0 1.25rem 1rem; }
+.acc-item.open .acc-body { display: block; }
+.acc-body ul { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
+.acc-body li { font-size: 0.88rem; color: #94a3b8; display: flex; gap: 0.5rem; }
+.acc-body li::before { content: '·'; color: var(--blue-light); flex-shrink: 0; }
+
+/* ===== FAQ ===== */
+.faq-grid { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1.5rem; }
+.faq-item { background: var(--surface); border: 1px solid var(--border); border-radius: 9px; overflow: hidden; }
+.faq-q {
+  width: 100%; background: none; border: none; font-family: inherit;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 1.25rem; cursor: pointer; color: #e2e8f0;
+  font-size: 0.9rem; font-weight: 600; text-align: right;
+}
+.faq-q:hover { background: rgba(255,255,255,0.02); }
+.faq-a { display: none; padding: 0 1.25rem 1rem; color: #94a3b8; font-size: 0.88rem; }
+.faq-item.open .faq-a { display: block; }
+.faq-item.open .faq-arr { transform: rotate(180deg); }
+.faq-arr { color: #64748b; transition: transform 0.3s; flex-shrink: 0; }
+
+/* ===== GITHUB SECTION ===== */
+.github-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 2.5rem;
+  display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: center;
+}
+.gh-features { display: flex; flex-direction: column; gap: 0.5rem; list-style: none; margin: 1rem 0; }
+.gh-features li { font-size: 0.88rem; color: #94a3b8; display: flex; align-items: center; gap: 0.5rem; }
+.gh-features li::before { content: '→'; color: var(--blue-light); }
+.gh-right { text-align: center; }
+.gh-clone { background: #0d1117; border: 1px solid #21262d; border-radius: 8px; padding: 1.25rem; direction: ltr; }
+.gh-clone pre { font-size: 0.78rem; color: #8b949e; margin-bottom: 0.75rem; }
+
+/* ===== CONTACT SECTION ===== */
+.contact-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 3rem; text-align: center;
+}
+.contact-card h2 { color: #fff; margin-bottom: 1rem; }
+.contact-card p { margin: 0 auto 1.5rem; max-width: 50ch; font-size: 0.95rem; }
+.tg-link {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: #2b5278; color: #fff; padding: 0.7rem 1.5rem;
+  border-radius: 8px; font-weight: 700; font-size: 0.95rem;
+  transition: background 0.2s;
+}
+.tg-link:hover { background: var(--blue); }
+
+/* ===== FOOTER ===== */
+footer {
+  background: #070809; border-top: 1px solid var(--border);
+  padding: 3rem 0 2rem; position: relative; z-index: 1;
+}
+.footer-inner { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 3rem; }
+.footer-brand h3 { color: #fff; font-size: 1.15rem; margin-bottom: 0.4rem; }
+.footer-brand p { font-size: 0.85rem; color: #475569; max-width: 32ch; }
+.footer-links h4 { color: #94a3b8; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 1rem; }
+.footer-links ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+.footer-links a { font-size: 0.85rem; color: #475569; transition: color 0.2s; }
+.footer-links a:hover { color: #94a3b8; }
+.footer-bottom { border-top: 1px solid var(--border); margin-top: 2.5rem; padding-top: 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+.footer-bottom p { font-size: 0.8rem; color: #334155; max-width: none; }
+
+/* ===== SCROLL INDICATOR ===== */
+.scroll-top {
+  position: fixed; bottom: 1.5rem; left: 1.5rem; z-index: 500;
+  width: 40px; height: 40px; border-radius: 8px;
+  background: var(--surface); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: #94a3b8; font-size: 1rem;
+  opacity: 0; pointer-events: none; transition: all 0.3s;
+}
+.scroll-top.visible { opacity: 1; pointer-events: auto; }
+.scroll-top:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
+
+/* ===== STATUS INDICATORS ===== */
+.status-online { color: var(--green); font-size: 0.78rem; display: flex; align-items: center; gap: 0.35rem; }
+.status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse-dot 2s infinite; }
+@keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+/* ===== INFO BOX ===== */
+.info-box {
+  background: rgba(36,129,204,0.08); border: 1px solid rgba(36,129,204,0.2);
+  border-radius: 8px; padding: 1rem 1.25rem;
+  display: flex; gap: 0.75rem; align-items: flex-start; margin-top: 1rem;
+}
+.info-box-icon { color: var(--blue-light); flex-shrink: 0; font-size: 1rem; margin-top: 0.05rem; }
+.info-box p { font-size: 0.86rem; color: #93c5fd; max-width: none; }
+
+/* ===== FEATURE GRID SPECIAL ===== */
+.lct-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.75rem; margin-top: 1.5rem; }
+.lct-item {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 0.9rem 1rem;
+  display: flex; align-items: center; gap: 0.6rem;
+  font-size: 0.85rem; color: #94a3b8;
+}
+.lct-item-icon { font-size: 1rem; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .hero-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+  .intro-grid { grid-template-columns: 1fr; }
+  .why-grid { grid-template-columns: 1fr 1fr; }
+  .github-card { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr 1fr; }
+  .footer-brand { grid-column: 1 / -1; }
+  .code-compare { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  section { padding: 3.5rem 0; }
+  h1 { font-size: 1.75rem; }
+  h2 { font-size: 1.4rem; }
+  .nav-links { display: none; }
+  #menu-toggle { display: block; }
+  .why-grid { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr; }
+  .hero-actions { flex-direction: column; }
+  .install-step { grid-template-columns: 1fr; }
+  .step-num { width: 40px; height: 40px; }
+  .api-step { flex-direction: column; gap: 0.75rem; }
+  .features-tabs { gap: 0.35rem; }
+  .tab-btn { font-size: 0.76rem; padding: 0.35rem 0.7rem; }
+  .lct-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<!-- NAVBAR -->
+<nav id="navbar" role="navigation" aria-label="منوی اصلی">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo">
+      <span>⬡</span> ONYX <span>SELF</span>
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#hero">خانه</a></li>
+      <li><a href="#intro">معرفی</a></li>
+      <li><a href="#features">قابلیت‌ها</a></li>
+      <li><a href="#install">نصب</a></li>
+      <li><a href="#telegram-api">API تلگرام</a></li>
+      <li><a href="#ai-config">هوش مصنوعی</a></li>
+      <li><a href="#security">امنیت</a></li>
+      <li><a href="#troubleshoot">رفع مشکل</a></li>
+      <li><a href="#faq">سوالات</a></li>
+      <li><a href="https://github.com/ONYXSELFBOT/ONYX-SELF-TELEGRAM" target="_blank" class="btn btn-outline nav-cta">GitHub ↗</a></li>
+    </ul>
+    <button id="menu-toggle" aria-label="منو" aria-expanded="false">☰</button>
+  </div>
+  <div id="mobile-menu" role="menu">
+    <a href="#hero">خانه</a>
+    <a href="#intro">معرفی</a>
+    <a href="#features">قابلیت‌ها</a>
+    <a href="#install">آموزش نصب</a>
+    <a href="#telegram-api">API تلگرام</a>
+    <a href="#ai-config">هوش مصنوعی</a>
+    <a href="#lct">Local Control Tower</a>
+    <a href="#security">امنیت</a>
+    <a href="#troubleshoot">رفع مشکل</a>
+    <a href="#faq">سوالات متداول</a>
+    <a href="https://github.com/ONYXSELFBOT/ONYX-SELF-TELEGRAM" target="_blank">GitHub ↗</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-badge">
+          <span>⬡</span> سلف‌بات تلگرام — نسخه عمومی
+        </div>
+        <h1 class="hero-title">
+          <span class="brand">ONYX SELF</span>
+          سلف‌بات هوشمند و قابل شخصی‌سازی
+        </h1>
+        <p class="hero-desc">
+          مدیریت، اتوماسیون، ابزارهای کاربردی، CRM،
+          هوش مصنوعی، امنیت شخصی و کنترل کامل — همه در یک سیستم.
+        </p>
+        <div class="hero-actions">
+          <a href="#install" class="btn btn-primary">آموزش نصب ↓</a>
+          <a href="#features" class="btn btn-outline">مشاهده قابلیت‌ها</a>
+          <a href="https://github.com/ONYXSELFBOT/ONYX-SELF-TELEGRAM" target="_blank" class="btn btn-ghost">GitHub ↗</a>
+        </div>
+      </div>
+      <div class="terminal-wrap" role="img" aria-label="نمایش وضعیت ONYX SELF">
+        <div class="terminal-bar">
+          <div class="t-dot r"></div>
+          <div class="t-dot y"></div>
+          <div class="t-dot g"></div>
+          <span class="t-title">ONYX SELF — Terminal</span>
+        </div>
+        <div class="terminal-body">
+          <div class="t-line"><span class="t-dim">$ </span><span class="t-cmd">python main.py</span></div>
+          <div class="t-line">&nbsp;</div>
+          <div class="t-line"><span class="t-orange">⬡  ONYX SELF</span> <span class="t-dim">v1.0</span></div>
+          <div class="t-line"><span class="t-dim">─────────────────────────</span></div>
+          <div class="t-line"><span class="t-dim">  System Status: </span><span class="t-green">ONLINE ●</span></div>
+          <div class="t-line">&nbsp;</div>
+          <div class="t-line"><span class="t-dim">  </span><span class="t-green">✓</span><span class="t-white"> Telegram Connected</span></div>
+          <div class="t-line"><span class="t-dim">  </span><span class="t-green">✓</span><span class="t-white"> Control Tower Ready</span></div>
+          <div class="t-line"><span class="t-dim">  </span><span class="t-green">✓</span><span class="t-white"> AI Engine Ready</span></div>
+          <div class="t-line"><span class="t-dim">  </span><span class="t-green">✓</span><span class="t-white"> Automation Active</span></div>
+          <div class="t-line"><span class="t-dim">  </span><span class="t-green">✓</span><span class="t-white"> CRM Ready</span></div>
+          <div class="t-line">&nbsp;</div>
+          <div class="t-line"><span class="t-dim">  Waiting for commands...</span><span class="t-blink t-cmd">█</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- INTRO -->
+<section id="intro">
+  <div class="container">
+    <div class="intro-grid">
+      <div>
+        <span class="section-label">معرفی محصول</span>
+        <h2 class="section-title">ONYX SELF چیست؟</h2>
+        <p style="margin-bottom:1.5rem;">
+          ONYX SELF یک سلف‌بات قابل شخصی‌سازی برای تلگرام است که مجموعه‌ای از ابزارهای مدیریتی، اتوماسیون، CRM، فروش، تحلیل، مدیریت محتوا، ابزارهای شخصی و سیستم کنترل لوکال را در یک محیط واحد فراهم می‌کند.
+        </p>
+        <p>
+          سیستم با رویکرد Privacy-First طراحی شده است. هیچ اطلاعات حساسی داخل سورس‌کد قرار نمی‌گیرد و تنظیمات روی محیط شخصی کاربر نگهداری می‌شوند.
+        </p>
+      </div>
+      <ul class="intro-points">
+        <li>اطلاعات حساس داخل سورس‌کد قرار نمی‌گیرند</li>
+        <li>راه‌اندازی اولیه در اولین اجرا با Setup Wizard انجام می‌شود</li>
+        <li>کاربر اطلاعات خودش را در محیط شخصی وارد می‌کند</li>
+        <li>تنظیمات روی محیط شخصی کاربر نگهداری می‌شوند</li>
+        <li>قابلیت‌های AI اختیاری هستند و بدون آن‌ها هم کار می‌کند</li>
+        <li>پروژه Open Source و قابل بازبینی است</li>
+        <li>روی Android (Termux) و Linux قابل اجرا است</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- WHY SECTION -->
+<section id="why">
+  <div class="container">
+    <span class="section-label">چرا ONYX</span>
+    <h2 class="section-title">یک سیستم، همه چیز</h2>
+    <p class="section-desc">به‌جای استفاده از ده‌ها ابزار پراکنده، ONYX همه چیز را در یک محیط یکپارچه فراهم می‌کند.</p>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">🔒</div>
+        <h4>Privacy-First</h4>
+        <p>اطلاعات شما روی سیستم خودتان می‌ماند. هیچ سرور خارجی دریافت‌کننده اطلاعات شما نیست.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">⚙️</div>
+        <h4>قابل شخصی‌سازی</h4>
+        <p>هر قابلیت را می‌توان جداگانه فعال یا غیرفعال کرد. ONYX متناسب با نیاز شما تنظیم می‌شود.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🤖</div>
+        <h4>هوش مصنوعی اختیاری</h4>
+        <p>AI مانند یک ماژول اختیاری کار می‌کند. بدون آن هم سیستم کامل و کاربردی است.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">📱</div>
+        <h4>روی موبایل</h4>
+        <p>با Termux روی Android قابل اجرا است. نیازی به سرور یا VPS ندارید.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🛡️</div>
+        <h4>Self-Healing</h4>
+        <p>سیستم خودشفابخش است. خرابی یک ابزار باعث توقف کل سیستم نمی‌شود.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">📂</div>
+        <h4>Open Source</h4>
+        <p>سورس‌کد کامل در GitHub در دسترس است. می‌توانید آن را بررسی و Contribute کنید.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="container">
+    <span class="section-label">قابلیت‌ها</span>
+    <h2 class="section-title">آنچه ONYX ارائه می‌دهد</h2>
+    <p class="section-desc">قابلیت‌ها به دسته‌بندی‌های مختلف تقسیم شده‌اند. یک دسته را انتخاب کنید.</p>
+    <div class="features-tabs" role="tablist">
+      <button class="tab-btn active" role="tab" data-tab="ai">🤖 هوش مصنوعی</button>
+      <button class="tab-btn" role="tab" data-tab="research">🔍 تحقیق</button>
+      <button class="tab-btn" role="tab" data-tab="crm">💼 فروش و CRM</button>
+      <button class="tab-btn" role="tab" data-tab="security">🛡️ امنیت</button>
+      <button class="tab-btn" role="tab" data-tab="media">📁 محتوا</button>
+      <button class="tab-btn" role="tab" data-tab="system">⚙️ سیستم</button>
+      <button class="tab-btn" role="tab" data-tab="daily">⏰ روزمره</button>
+    </div>
+
+    <div id="tab-ai" class="tab-panel active">
+      <div class="feat-card"><div class="feat-icon">🧠</div><h4>اتصال به هوش مصنوعی</h4><p>پشتیبانی از API‌های مختلف هوش مصنوعی از جمله Gemini با قابلیت تنظیم از داخل Control Tower.</p></div>
+      <div class="feat-card"><div class="feat-icon">💬</div><h4>Smart Negotiator</h4><p>ابزار هوشمند برای تحلیل مکالمه و کمک به مذاکره و مدیریت ارتباطات.</p></div>
+      <div class="feat-card"><div class="feat-icon">🌐</div><h4>Web Intelligence Agent</h4><p>جمع‌آوری، مقایسه و تحلیل اطلاعات از منابع مختلف وب.</p></div>
+      <div class="feat-card"><div class="feat-icon">🔀</div><h4>Counterfactual Engine</h4><p>بررسی سناریوهای احتمالی و تحلیل «اگر چنین شود چه می‌شود؟».</p></div>
+      <div class="feat-card"><div class="feat-icon">🔄</div><h4>Context Switcher</h4><p>مدیریت Context‌های مختلف هوش مصنوعی برای موقعیت‌های متفاوت.</p></div>
+      <div class="feat-card"><div class="feat-icon">🔗</div><h4>Gemini / API Integration</h4><p>اتصال مستقیم به Gemini API با پیکربندی کامل از داخل سیستم.</p></div>
+    </div>
+
+    <div id="tab-research" class="tab-panel">
+      <div class="feat-card"><div class="feat-icon">🔍</div><h4>OSINT Investigation Workspace</h4><p>محیط سازمان‌یافته برای انجام تحقیقات مبتنی بر منابع عمومی.</p></div>
+      <div class="feat-card"><div class="feat-icon">📊</div><h4>Evidence Analyzer</h4><p>ابزار تحلیل و سازمان‌دهی شواهد و اطلاعات جمع‌آوری‌شده.</p></div>
+      <div class="feat-card"><div class="feat-icon">🔎</div><h4>Duplicate Intelligence</h4><p>تشخیص محتوای تکراری و مدیریت هوشمند آن‌ها.</p></div>
+      <div class="feat-card"><div class="feat-icon">🔗</div><h4>Smart Link Intelligence</h4><p>تحلیل و بررسی هوشمند لینک‌ها پیش از باز کردن.</p></div>
+      <div class="feat-card"><div class="feat-icon">📡</div><h4>Personal Radar</h4><p>رصد و پیگیری اطلاعات مرتبط بر اساس تنظیمات شخصی.</p></div>
+      <div class="feat-card"><div class="feat-icon">⏮</div><h4>Event Replay</h4><p>مرور و تحلیل مجدد رویدادهای گذشته برای استخراج الگو.</p></div>
+    </div>
+
+    <div id="tab-crm" class="tab-panel">
+      <div class="feat-card"><div class="feat-icon">👥</div><h4>CRM</h4><p>مدیریت کامل مشتریان، تاریخچه تعاملات و وضعیت هر مشتری.</p></div>
+      <div class="feat-card"><div class="feat-icon">📦</div><h4>مدیریت محصولات</h4><p>تعریف و مدیریت محصولات با قابلیت پیکربندی کامل.</p></div>
+      <div class="feat-card"><div class="feat-icon">💰</div><h4>Sales Tools</h4><p>ابزارهای فروش برای مدیریت قیف فروش و پیگیری وضعیت معاملات.</p></div>
+      <div class="feat-card"><div class="feat-icon">🧾</div><h4>Invoice Studio</h4><p>ساخت و مدیریت فاکتورهای حرفه‌ای برای مشتریان.</p></div>
+      <div class="feat-card"><div class="feat-icon">📝</div><h4>Contract & Invoice Forge</h4><p>ایجاد قراردادها و فاکتورهای استاندارد با قالب‌های قابل تنظیم.</p></div>
+      <div class="feat-card"><div class="feat-icon">📈</div><h4>Product Management</h4><p>مدیریت کامل محصولات، موجودی و اطلاعات مرتبط.</p></div>
+    </div>
+
+    <div id="tab-security" class="tab-panel">
+      <div class="feat-card"><div class="feat-icon">🪪</div><h4>Identity Verifier</h4><p>ابزار تأیید هویت و احراز اطلاعات افراد در تعاملات.</p></div>
+      <div class="feat-card"><div class="feat-icon">🪤</div><h4>Honeytrap Detector</h4><p>تشخیص تله‌های احتمالی و موقعیت‌های مشکوک در مکالمات.</p></div>
+      <div class="feat-card"><div class="feat-icon">🚫</div><h4>Personal Blacklist Intelligence</h4><p>مدیریت هوشمند لیست سیاه شخصی با قابلیت‌های پیشرفته.</p></div>
+      <div class="feat-card"><div class="feat-icon">🎥</div><h4>Black Box Recorder</h4><p>ثبت و نگهداری سوابق مهم برای مراجعه بعدی.</p></div>
+      <div class="feat-card"><div class="feat-icon">💧</div><h4>Invisible Watermark Engine</h4><p>اضافه کردن واترمارک نامرئی به محتوا برای ردیابی منبع نشت اطلاعات.</p></div>
+      <div class="feat-card"><div class="feat-icon">🔒</div><h4>Airlock Mode</h4><p>حالت قفل کامل سیستم برای موقعیت‌های حساس.</p></div>
+    </div>
+
+    <div id="tab-media" class="tab-panel">
+      <div class="feat-card"><div class="feat-icon">📤</div><h4>Universal Exporter</h4><p>خروجی گرفتن از اطلاعات و محتوا در فرمت‌های مختلف.</p></div>
+      <div class="feat-card"><div class="feat-icon">📥</div><h4>Universal Capture</h4><p>ذخیره سریع و هوشمند محتوا از منابع مختلف.</p></div>
+      <div class="feat-card"><div class="feat-icon">🎛</div><h4>Command Studio</h4><p>محیط مدیریت Commandها و دستورهای سفارشی.</p></div>
+      <div class="feat-card"><div class="feat-icon">🖼</div><h4>Media Tools</h4><p>ابزارهای مدیریت و پردازش Media.</p></div>
+      <div class="feat-card"><div class="feat-icon">📁</div><h4>File Management</h4><p>مدیریت فایل‌ها و سازمان‌دهی محتوا.</p></div>
+      <div class="feat-card"><div class="feat-icon">🧾</div><h4>Receipt & Timed Media Saver</h4><p>ذخیره هوشمند رسیدها و Media زمان‌دار بر اساس تنظیمات کاربر.</p></div>
+    </div>
+
+    <div id="tab-system" class="tab-panel">
+      <div class="feat-card"><div class="feat-icon">🗼</div><h4>Personal Control Tower</h4><p>مرکز کنترل شخصی برای مدیریت تمام بخش‌های ONYX.</p></div>
+      <div class="feat-card"><div class="feat-icon">🖥</div><h4>Local Control Tower</h4><p>رابط کاربری محلی برای مانیتورینگ و مدیریت سیستم.</p></div>
+      <div class="feat-card"><div class="feat-icon">💊</div><h4>Self-Healing Engine</h4><p>موتور خودشفابخش که در صورت بروز خطا به صورت خودکار مشکل را مدیریت می‌کند.</p></div>
+      <div class="feat-card"><div class="feat-icon">❤️</div><h4>Health Monitoring</h4><p>پایش مداوم وضعیت سلامت سیستم و اجزای آن.</p></div>
+      <div class="feat-card"><div class="feat-icon">📋</div><h4>Logging & Error Reporting</h4><p>ثبت دقیق Logها و گزارش خطاها برای عیب‌یابی.</p></div>
+      <div class="feat-card"><div class="feat-icon">🧰</div><h4>Setup Wizard</h4><p>راه‌اندازی مرحله‌به‌مرحله در اولین اجرا بدون نیاز به تنظیم دستی فایل‌ها.</p></div>
+    </div>
+
+    <div id="tab-daily" class="tab-panel">
+      <div class="feat-card"><div class="feat-icon">🕐</div><h4>ساعت و تاریخ شمسی</h4><p>نمایش ساعت با فونت‌ها و ظاهرهای مختلف همراه با تاریخ شمسی.</p></div>
+      <div class="feat-card"><div class="feat-icon">🌍</div><h4>Timezone</h4><p>انتخاب و مدیریت منطقه زمانی برای نمایش صحیح زمان.</p></div>
+      <div class="feat-card"><div class="feat-icon">🅰️</div><h4>Font Customization</h4><p>انتخاب فونت دلخواه برای نمایش ساعت و اطلاعات.</p></div>
+      <div class="feat-card"><div class="feat-icon">🎮</div><h4>بخش بازی‌ها</h4><p>ابزارها و قابلیت‌های سرگرمی تعبیه‌شده در سیستم.</p></div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- REQUIREMENTS -->
+<section id="requirements">
+  <div class="container">
+    <span class="section-label">پیش‌نیازها</span>
+    <h2 class="section-title">نیازمندی‌های سیستم</h2>
+    <p>پیش از نصب، مطمئن شوید موارد زیر آماده هستند.</p>
+    <table class="req-table">
+      <thead>
+        <tr>
+          <th>مورد</th>
+          <th>نیاز</th>
+          <th>وضعیت</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>سیستم عامل</td><td>Android (Termux) / Linux / محیط سازگار</td><td><span class="badge badge-req">ضروری</span></td></tr>
+        <tr><td>Python</td><td>Python 3.x</td><td><span class="badge badge-req">ضروری</span></td></tr>
+        <tr><td>Git</td><td>برای دریافت پروژه از GitHub</td><td><span class="badge badge-req">ضروری</span></td></tr>
+        <tr><td>حساب تلگرام</td><td>حساب فعال تلگرام</td><td><span class="badge badge-req">ضروری</span></td></tr>
+        <tr><td>API ID</td><td>دریافت از my.telegram.org</td><td><span class="badge badge-req">ضروری</span></td></tr>
+        <tr><td>API HASH</td><td>دریافت از my.telegram.org</td><td><span class="badge badge-req">ضروری</span></td></tr>
+        <tr><td>AI API Key</td><td>در صورت استفاده از قابلیت‌های AI</td><td><span class="badge badge-opt">اختیاری</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- INSTALL -->
+<section id="install">
+  <div class="container">
+    <span class="section-label">آموزش نصب</span>
+    <h2 class="section-title">نصب ONYX SELF</h2>
+    <p class="section-desc">مراحل نصب را به‌ترتیب دنبال کنید. اگر روی کامپیوتر Linux نصب می‌کنید، مرحله Termux را رد کنید.</p>
+
+    <div class="install-steps">
+
+      <div class="install-step">
+        <div class="step-num">۱</div>
+        <div class="step-content">
+          <h3>نصب Termux (برای Android)</h3>
+          <p>Termux یک محیط Terminal برای Android است که امکان اجرای دستورات Linux و Python را فراهم می‌کند. برای اجرای ONYX روی اندروید ضروری است.</p>
+          <a href="https://f-droid.org/repo/com.termux_1022.apk" class="btn btn-outline" style="display:inline-flex;margin-bottom:0.75rem;" target="_blank">⬇ دانلود Termux از F-Droid</a>
+          <div class="info-box">
+            <span class="info-box-icon">ℹ</span>
+            <p>Termux را از F-Droid دانلود کنید. نسخه Google Play به‌روز نیست و ممکن است مشکل داشته باشد.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="install-step">
+        <div class="step-num">۲</div>
+        <div class="step-content">
+          <h3>آپدیت و نصب پیش‌نیازها</h3>
+          <p>پس از باز کردن Termux، ابتدا پکیج‌ها را آپدیت کنید:</p>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this)">📋 کپی</button></div>
+            <div class="code-body"><pre><span class="prompt">$ </span><span class="cmd" data-code="pkg update && pkg upgrade">pkg update && pkg upgrade</span></pre></div>
+          </div>
+          <p style="margin-top:0.75rem;">سپس Python و Git را نصب کنید:</p>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this)">📋 کپی</button></div>
+            <div class="code-body"><pre><span class="prompt">$ </span><span class="cmd" data-code="pkg install python git">pkg install python git</span></pre></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="install-step">
+        <div class="step-num">۳</div>
+        <div class="step-content">
+          <h3>دریافت پروژه از GitHub</h3>
+          <p>پروژه را با Git Clone دریافت کنید:</p>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this)">📋 کپی</button></div>
+            <div class="code-body"><pre><span class="prompt">$ </span><span class="cmd" data-code="git clone https://github.com/ONYXSELFBOT/ONYX-SELF-TELEGRAM.git">git clone https://github.com/ONYXSELFBOT/ONYX-SELF-TELEGRAM.git</span></pre></div>
+          </div>
+          <p style="margin-top:0.75rem;">وارد پوشه پروژه شوید:</p>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this)">📋 کپی</button></div>
+            <div class="code-body"><pre><span class="prompt">$ </span><span class="cmd" data-code="cd ONYX-SELF-TELEGRAM">cd ONYX-SELF-TELEGRAM</span></pre></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="install-step">
+        <div class="step-num">۴</div>
+        <div class="step-content">
+          <h3>اجرای ONYX</h3>
+          <p>پروژه را اجرا کنید. در اولین اجرا، Setup Wizard راه‌اندازی می‌شود و اطلاعات لازم را از شما می‌خواهد:</p>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this)">📋 کپی</button></div>
+            <div class="code-body"><pre><span class="prompt">$ </span><span class="cmd" data-code="python main.py">python main.py</span></pre></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- FIRST RUN -->
+<section id="first-run">
+  <div class="container">
+    <span class="section-label">اولین اجرا</span>
+    <h2 class="section-title">Setup Wizard — راه‌اندازی اولیه</h2>
+    <p style="margin-bottom:2rem;">در اولین اجرا، ONYX به صورت مرحله‌به‌مرحله اطلاعات لازم را از شما دریافت می‌کند.</p>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-dot"></div><h4>۱ — اجرای ONYX</h4><p>با دستور <code>python main.py</code> پروژه اجرا می‌شود و Setup Wizard فعال می‌شود.</p></div>
+      <div class="tl-item"><div class="tl-dot"></div><h4>۲ — وارد کردن API ID</h4><p>API ID دریافت‌شده از my.telegram.org را وارد کنید.</p></div>
+      <div class="tl-item"><div class="tl-dot"></div><h4>۳ — وارد کردن API HASH</h4><p>API HASH را وارد کنید. این مقدار را محرمانه نگه دارید.</p></div>
+      <div class="tl-item"><div class="tl-dot"></div><h4>۴ — شماره تلفن</h4><p>شماره تلفن مرتبط با حساب تلگرام خود را با کد کشور وارد کنید.</p></div>
+      <div class="tl-item"><div class="tl-dot"></div><h4>۵ — کد تلگرام</h4><p>تلگرام یک کد تأیید ارسال می‌کند. آن را وارد کنید.</p></div>
+      <div class="tl-item"><div class="tl-dot"></div><h4>۶ — رمز دومرحله‌ای (در صورت فعال بودن)</h4><p>اگر Two-Step Verification فعال دارید، رمز را وارد کنید.</p></div>
+      <div class="tl-item"><div class="tl-dot"></div><h4>۷ — AI API (اختیاری)</h4><p>اگر می‌خواهید از قابلیت‌های هوش مصنوعی استفاده کنید، API Key خود را وارد کنید. در غیر این صورت می‌توانید رد کنید.</p></div>
+      <div class="tl-item"><div class="tl-dot"></div><h4>۸ — انتخاب Timezone</h4><p>منطقه زمانی خود را برای نمایش صحیح ساعت و تاریخ انتخاب کنید.</p></div>
+      <div class="tl-item"><div class="tl-dot"></div><h4>۹ — راه‌اندازی کامل</h4><p>ONYX آماده است. سیستم شروع به کار می‌کند.</p></div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- TELEGRAM API -->
+<section id="telegram-api">
+  <div class="container">
+    <span class="section-label">API تلگرام</span>
+    <h2 class="section-title">دریافت API ID و API HASH</h2>
+    <p style="margin-bottom:2rem;">برای استفاده از ONYX به API ID و API HASH تلگرام نیاز دارید. این اطلاعات رایگان و از طریق سایت رسمی تلگرام قابل دریافت هستند.</p>
+    <div class="api-steps">
+      <div class="api-step">
+        <div class="api-step-num">۱</div>
+        <div>
+          <h4>ورود به سایت تلگرام</h4>
+          <p>به آدرس <a href="https://my.telegram.org" target="_blank">my.telegram.org</a> مراجعه کنید.</p>
+        </div>
+      </div>
+      <div class="api-step">
+        <div class="api-step-num">۲</div>
+        <div>
+          <h4>ورود با شماره تلفن</h4>
+          <p>شماره تلفن مرتبط با حساب تلگرام خود را وارد کنید. این باید همان حسابی باشد که قرار است ONYX روی آن اجرا شود.</p>
+        </div>
+      </div>
+      <div class="api-step">
+        <div class="api-step-num">۳</div>
+        <div>
+          <h4>ورود به API Development Tools</h4>
+          <p>پس از ورود، گزینه «API Development Tools» را انتخاب کنید.</p>
+        </div>
+      </div>
+      <div class="api-step">
+        <div class="api-step-num">۴</div>
+        <div>
+          <h4>ساخت Application جدید</h4>
+          <p>فرم ایجاد Application را پر کنید:</p>
+          <ul style="list-style:none;margin-top:0.5rem;display:flex;flex-direction:column;gap:0.3rem;">
+            <li style="font-size:0.88rem;color:#94a3b8;"><code style="color:var(--blue-light);">App title</code> — عنوان دلخواه برای Application</li>
+            <li style="font-size:0.88rem;color:#94a3b8;"><code style="color:var(--blue-light);">Short name</code> — نام کوتاه (فقط حروف و اعداد)</li>
+            <li style="font-size:0.88rem;color:#94a3b8;"><code style="color:var(--blue-light);">Platform</code> — گزینه Other را انتخاب کنید</li>
+          </ul>
+        </div>
+      </div>
+      <div class="api-step">
+        <div class="api-step-num">۵</div>
+        <div>
+          <h4>دریافت API ID و API HASH</h4>
+          <p>پس از ایجاد Application، API ID و API HASH نمایش داده می‌شوند. این مقادیر را کپی و در محیطی امن نگهداری کنید.</p>
+          <div class="warning-box" style="margin-top:0.75rem;">
+            <h4>⚠ هشدار امنیتی</h4>
+            <ul class="warning-items">
+              <li>API HASH را هرگز با دیگران به اشتراک نگذارید</li>
+              <li>این مقادیر را داخل GitHub Commit نکنید</li>
+              <li>از این اطلاعات فقط در Setup Wizard استفاده کنید</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- TELEGRAM LOGIN -->
+<section id="tg-login">
+  <div class="container">
+    <span class="section-label">ورود تلگرام</span>
+    <h2 class="section-title">فرآیند Login تلگرام</h2>
+    <p style="margin-bottom:2rem;">در هنگام راه‌اندازی، ONYX از شما می‌خواهد به حساب تلگرام خود وارد شوید. این فرآیند فقط یک‌بار انجام می‌شود.</p>
+    <div class="install-steps">
+      <div class="install-step">
+        <div class="step-num">۱</div>
+        <div class="step-content"><h3>شماره تلفن</h3><p>شماره تلفن خود را با کد کشور وارد کنید. مثال: <code style="color:var(--blue-light);">+989123456789</code></p></div>
+      </div>
+      <div class="install-step">
+        <div class="step-num">۲</div>
+        <div class="step-content"><h3>دریافت کد تأیید</h3><p>تلگرام یک کد به حساب شما ارسال می‌کند. این کد در پیام‌های تلگرام شما (از طریق اکانت Telegram خودتان) ظاهر می‌شود.</p></div>
+      </div>
+      <div class="install-step">
+        <div class="step-num">۳</div>
+        <div class="step-content">
+          <h3>وارد کردن کد</h3>
+          <p>کد دریافت‌شده را وارد کنید.</p>
+          <div class="warning-box">
+            <h4>⚠ مهم</h4>
+            <ul class="warning-items"><li>کد ورود تلگرام را در اختیار هیچ‌کس قرار ندهید</li></ul>
+          </div>
+        </div>
+      </div>
+      <div class="install-step">
+        <div class="step-num">۴</div>
+        <div class="step-content"><h3>رمز دومرحله‌ای (در صورت نیاز)</h3><p>اگر Two-Step Verification فعال دارید، رمز آن را وارد کنید.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- AI CONFIG -->
+<section id="ai-config">
+  <div class="container">
+    <span class="section-label">هوش مصنوعی</span>
+    <h2 class="section-title">اتصال هوش مصنوعی</h2>
+    <p style="margin-bottom:1.5rem;">قابلیت‌های AI در ONYX اختیاری هستند. بسیاری از امکانات سیستم بدون AI نیز به درستی کار می‌کنند.</p>
+    <div class="info-box" style="margin-bottom:2rem;">
+      <span class="info-box-icon">💡</span>
+      <p>اگر AI API ندارید، می‌توانید آن را در Setup Wizard رد کنید. در هر زمان می‌توانید از داخل Local Control Tower آن را فعال کنید.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">🔑</div>
+        <h4>API Key</h4>
+        <p>کلید API هوش مصنوعی خود را از Provider مورد نظر دریافت کنید.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🏢</div>
+        <h4>Provider</h4>
+        <p>Provider هوش مصنوعی مورد استفاده را مشخص کنید. پشتیبانی از Gemini و سایر API‌های سازگار.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🔄</div>
+        <h4>فعال/غیرفعال</h4>
+        <p>می‌توانید AI را در هر زمان از Local Control Tower فعال یا غیرفعال کنید.</p>
+      </div>
+    </div>
+    <div class="info-box" style="margin-top:1.5rem;">
+      <span class="info-box-icon">⚙</span>
+      <p>تنظیمات AI از داخل Setup Wizard یا Local Control Tower قابل مدیریت هستند. هیچ API Key واقعی نباید در فایل‌های پروژه قرار بگیرد.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- LCT -->
+<section id="lct">
+  <div class="container">
+    <span class="section-label">مرکز کنترل</span>
+    <h2 class="section-title">Local Control Tower</h2>
+    <p style="margin-bottom:1.5rem;">Local Control Tower رابط کاربری محلی ONYX است که امکان مدیریت و مانیتورینگ کامل سیستم را فراهم می‌کند.</p>
+    <div class="info-box" style="margin-bottom:1.5rem;">
+      <span class="info-box-icon">ℹ</span>
+      <p>آدرس دسترسی به Local Control Tower بسته به تنظیمات و نسخه پروژه نمایش داده می‌شود. پس از اجرای ONYX آدرس در Terminal نمایش داده خواهد شد.</p>
+    </div>
+    <h3 style="color:#fff;margin-bottom:1rem;">موارد قابل مدیریت</h3>
+    <div class="lct-grid">
+      <div class="lct-item"><span class="lct-item-icon">📊</span> System Status</div>
+      <div class="lct-item"><span class="lct-item-icon">⚙️</span> Feature Status</div>
+      <div class="lct-item"><span class="lct-item-icon">📋</span> Activity Feed</div>
+      <div class="lct-item"><span class="lct-item-icon">🗒</span> Logs</div>
+      <div class="lct-item"><span class="lct-item-icon">🤖</span> AI Settings</div>
+      <div class="lct-item"><span class="lct-item-icon">🔧</span> External Tools</div>
+      <div class="lct-item"><span class="lct-item-icon">🔍</span> Research Systems</div>
+      <div class="lct-item"><span class="lct-item-icon">🧾</span> Receipt Saver</div>
+      <div class="lct-item"><span class="lct-item-icon">👥</span> CRM</div>
+      <div class="lct-item"><span class="lct-item-icon">💰</span> Sales</div>
+      <div class="lct-item"><span class="lct-item-icon">⏰</span> Automation</div>
+      <div class="lct-item"><span class="lct-item-icon">📱</span> Media Manager</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- CRM -->
+<section id="crm">
+  <div class="container">
+    <span class="section-label">فروش و مدیریت</span>
+    <h2 class="section-title">CRM و فروش</h2>
+    <p style="margin-bottom:2rem;">سیستم CRM و فروش ONYX بر اساس Product-Based طراحی شده و محدود به نوع خاصی از محصول نیست.</p>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">👥</div>
+        <h4>مدیریت مشتریان</h4>
+        <p>تاریخچه کامل تعاملات، وضعیت مشتری و اطلاعات تماس در یک مکان.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">📦</div>
+        <h4>مدیریت محصولات</h4>
+        <p>تعریف و مدیریت محصولات با قیمت‌گذاری و پیکربندی کامل.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">💰</div>
+        <h4>ابزارهای فروش</h4>
+        <p>پیگیری وضعیت معاملات و مدیریت قیف فروش.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🧾</div>
+        <h4>Invoice Studio</h4>
+        <p>ساخت فاکتورهای حرفه‌ای با قالب‌های قابل شخصی‌سازی.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">📝</div>
+        <h4>Contract Forge</h4>
+        <p>ایجاد قراردادهای استاندارد برای ذخیره‌سازی و ارسال.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">📈</div>
+        <h4>گزارش‌گیری</h4>
+        <p>خلاصه فعالیت‌های فروش و CRM برای مرور و تحلیل.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- INTELLIGENCE -->
+<section id="intelligence">
+  <div class="container">
+    <span class="section-label">تحقیق و تحلیل</span>
+    <h2 class="section-title">Intelligence & Research</h2>
+    <p style="margin-bottom:2rem;">ابزارهای تحقیقاتی ONYX برای جمع‌آوری، تحلیل و سازمان‌دهی اطلاعات طراحی شده‌اند.</p>
+    <div class="install-steps">
+      <div class="install-step">
+        <div class="step-num" style="font-size:1.2rem;">🔍</div>
+        <div class="step-content">
+          <h3>OSINT Investigation Workspace</h3>
+          <p>محیط سازمان‌یافته‌ای برای انجام تحقیقات مبتنی بر منابع عمومی. امکان ایجاد کیس‌های تحقیقاتی، سازمان‌دهی شواهد و مستندسازی مراحل تحقیق را فراهم می‌کند.</p>
+        </div>
+      </div>
+      <div class="install-step">
+        <div class="step-num" style="font-size:1.2rem;">🌐</div>
+        <div class="step-content">
+          <h3>Web Intelligence Agent</h3>
+          <p>ابزار هوشمند برای جمع‌آوری، مقایسه و تحلیل اطلاعات از منابع مختلف وب. به سازماندهی داده‌های جمع‌آوری‌شده کمک می‌کند.</p>
+        </div>
+      </div>
+      <div class="install-step">
+        <div class="step-num" style="font-size:1.2rem;">🔀</div>
+        <div class="step-content">
+          <h3>Counterfactual Engine</h3>
+          <p>موتور تحلیل سناریوهای احتمالی. به شما کمک می‌کند سؤال «اگر چنین شود چه می‌شود؟» را به‌صورت ساختاریافته بررسی کنید.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- RECEIPT / MEDIA -->
+<section id="receipt">
+  <div class="container">
+    <span class="section-label">مدیریت رسانه</span>
+    <h2 class="section-title">ذخیره هوشمند رسید و Media زمان‌دار</h2>
+    <p style="margin-bottom:2rem;">این قابلیت می‌تواند Media‌های مرتبط را بر اساس تنظیمات کاربر تشخیص و مدیریت کند.</p>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">🧾</div>
+        <h4>Receipt Detection</h4>
+        <p>تشخیص هوشمند رسیدهای مالی و ذخیره‌سازی خودکار آن‌ها.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">⏰</div>
+        <h4>Timed Media Detection</h4>
+        <p>تشخیص و ذخیره Media زمان‌داری که به‌زودی منقضی می‌شوند.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🔄</div>
+        <h4>Duplicate Protection</h4>
+        <p>جلوگیری از ذخیره‌سازی فایل‌های تکراری.</p>
+      </div>
+    </div>
+    <div class="warning-box" style="background:rgba(245,158,11,0.06);border-color:rgba(245,158,11,0.2);margin-top:1.5rem;">
+      <h4 style="color:#fcd34d;">📋 تنظیمات پیش‌فرض</h4>
+      <ul class="warning-items" style="color:#fbbf24;">
+        <li style="color:#fbbf24;">Private Chats — قابل تنظیم</li>
+        <li style="color:#fbbf24;">Groups — به‌صورت پیش‌فرض غیرفعال (برای جلوگیری از ذخیره ناخواسته)</li>
+        <li style="color:#fbbf24;">Channels — به‌صورت پیش‌فرض غیرفعال</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- EXTERNAL TOOLS -->
+<section id="external-tools">
+  <div class="container">
+    <span class="section-label">ابزارهای خارجی</span>
+    <h2 class="section-title">External Tools</h2>
+    <p style="margin-bottom:1.5rem;">ONYX قابلیت مدیریت ابزارهای خارجی را دارد. این ابزارها مستقل از هسته ONYX اجرا می‌شوند تا خرابی یک ابزار باعث توقف کل سیستم نشود.</p>
+    <div class="lct-grid">
+      <div class="lct-item"><span class="lct-item-icon">⬇</span> Install</div>
+      <div class="lct-item"><span class="lct-item-icon">▶</span> Start</div>
+      <div class="lct-item"><span class="lct-item-icon">⏹</span> Stop</div>
+      <div class="lct-item"><span class="lct-item-icon">🔄</span> Restart</div>
+      <div class="lct-item"><span class="lct-item-icon">📊</span> Status</div>
+      <div class="lct-item"><span class="lct-item-icon">📋</span> Logs</div>
+      <div class="lct-item"><span class="lct-item-icon">⬆</span> Update</div>
+      <div class="lct-item"><span class="lct-item-icon">▷</span> Execute</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- CLOCK -->
+<section id="clock">
+  <div class="container">
+    <span class="section-label">ابزارهای روزمره</span>
+    <h2 class="section-title">ساعت و تاریخ شمسی</h2>
+    <p style="margin-bottom:2rem;">ONYX امکان نمایش ساعت با فونت‌ها و ظاهرهای مختلف همراه با تاریخ شمسی را فراهم می‌کند.</p>
+    <div class="why-grid">
+      <div class="why-card"><div class="why-icon">🕐</div><h4>فعال/غیرفعال</h4><p>نمایش ساعت را می‌توان فعال یا غیرفعال کرد.</p></div>
+      <div class="why-card"><div class="why-icon">🅰️</div><h4>انتخاب فونت</h4><p>فونت مورد نظر برای نمایش ساعت قابل انتخاب است.</p></div>
+      <div class="why-card"><div class="why-icon">🎨</div><h4>ظاهرهای مختلف</h4><p>ظاهر ساعت قابل شخصی‌سازی است.</p></div>
+      <div class="why-card"><div class="why-icon">🌍</div><h4>Timezone</h4><p>منطقه زمانی برای نمایش صحیح زمان قابل تنظیم است.</p></div>
+      <div class="why-card"><div class="why-icon">📅</div><h4>تاریخ شمسی</h4><p>تاریخ شمسی در کنار ساعت نمایش داده می‌شود.</p></div>
+      <div class="why-card"><div class="why-icon">⚙️</div><h4>مدیریت از Control Tower</h4><p>تمام تنظیمات از Local Control Tower قابل مدیریت هستند.</p></div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- CONFIGURATION -->
+<section id="config">
+  <div class="container">
+    <span class="section-label">تنظیمات</span>
+    <h2 class="section-title">تنظیمات ONYX</h2>
+    <p style="margin-bottom:2rem;">تنظیمات ONYX از طریق Setup Wizard یا Local Control Tower قابل مدیریت هستند.</p>
+    <div class="install-steps">
+      <div class="install-step">
+        <div class="step-num" style="font-size:0.75rem;">Setup</div>
+        <div class="step-content">
+          <h3>اجرای مجدد Setup</h3>
+          <p>برای اجرای مجدد Setup Wizard از دستور زیر استفاده کنید:</p>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this)">📋 کپی</button></div>
+            <div class="code-body"><pre><span class="prompt">$ </span><span class="cmd" data-code="python main.py --setup">python main.py --setup</span></pre></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="info-box" style="margin-top:1.5rem;">
+      <span class="info-box-icon">📋</span>
+      <p>دستورات فعال بسته به نسخه و قابلیت‌های فعال ONYX ممکن است متفاوت باشند. برای مشاهده لیست به‌روز دستورات به <a href="https://github.com/ONYXSELFBOT/ONYX-SELF-TELEGRAM" target="_blank" style="color:var(--blue-light);">GitHub پروژه</a> مراجعه کنید.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- SECURITY -->
+<section id="security">
+  <div class="container">
+    <span class="section-label">امنیت</span>
+    <h2 class="section-title">نکات امنیتی مهم</h2>
+    <p style="margin-bottom:1.5rem;">حفظ امنیت اطلاعات شخصی در استفاده از ONYX اهمیت بالایی دارد. این موارد را جدی بگیرید.</p>
+    <div class="warning-box">
+      <h4>⚠ اطلاعاتی که هرگز نباید عمومی شوند</h4>
+      <ul class="warning-items">
+        <li>API ID تلگرام</li>
+        <li>API HASH تلگرام</li>
+        <li>Telegram Session</li>
+        <li>شماره تلفن حساب</li>
+        <li>AI API Key</li>
+        <li>Bot Token (در صورت وجود)</li>
+        <li>رمز عبور</li>
+        <li>رمز Two-Step Verification</li>
+        <li>فایل‌های تنظیمات شخصی</li>
+      </ul>
+    </div>
+    <div class="code-compare">
+      <div class="code-bad">
+        <div class="code-bad-header">❌ اشتباه — نگذارید در کد</div>
+        <pre>API_ID = 12345678
+API_HASH = "abcdef..."
+PHONE = "+989..."</pre>
+      </div>
+      <div class="code-good">
+        <div class="code-good-header">✓ صحیح — از Setup Wizard استفاده کنید</div>
+        <pre>اطلاعات در Setup Wizard
+وارد می‌شوند و روی
+سیستم شخصی ذخیره می‌مانند.</pre>
+      </div>
+    </div>
+    <div class="info-box" style="margin-top:1.5rem;">
+      <span class="info-box-icon">🔒</span>
+      <p>هرگز این اطلاعات را داخل GitHub Commit نکنید. فایل‌های تنظیمات را به git اضافه نکنید.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- TROUBLESHOOT -->
+<section id="troubleshoot">
+  <div class="container">
+    <span class="section-label">رفع مشکل</span>
+    <h2 class="section-title">مشکلات رایج و راه‌حل</h2>
+    <p>اگر با مشکلی روبرو شدید، موارد زیر را بررسی کنید.</p>
+    <div class="accordion">
+      <div class="acc-item">
+        <button class="acc-header" onclick="toggleAcc(this)">پروژه اجرا نمی‌شود <span class="acc-arrow">▾</span></button>
+        <div class="acc-body"><ul>
+          <li>نسخه Python را بررسی کنید: <code>python --version</code></li>
+          <li>مطمئن شوید Python 3.x نصب است</li>
+          <li>Dependency‌های پروژه را نصب کنید</li>
+          <li>Log‌های خطا را در Terminal بررسی کنید</li>
+          <li>مطمئن شوید داخل پوشه پروژه هستید</li>
+        </ul></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-header" onclick="toggleAcc(this)">خطای API تلگرام <span class="acc-arrow">▾</span></button>
+        <div class="acc-body"><ul>
+          <li>API ID را با دقت بررسی کنید (فقط عدد است)</li>
+          <li>API HASH را مجدداً از my.telegram.org کپی کنید</li>
+          <li>مطمئن شوید Application را در حساب صحیح ساخته‌اید</li>
+          <li>اگر Application تازه ساخته‌اید، چند دقیقه صبر کنید</li>
+        </ul></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-header" onclick="toggleAcc(this)">کد ورود تلگرام دریافت نمی‌شود <span class="acc-arrow">▾</span></button>
+        <div class="acc-body"><ul>
+          <li>شماره تلفن را با کد کشور صحیح وارد کنید</li>
+          <li>اتصال اینترنت را بررسی کنید</li>
+          <li>صندوق پیام تلگرام خود را بررسی کنید (کد در پیام‌های Telegram می‌آید)</li>
+          <li>چند دقیقه صبر کنید و دوباره تلاش کنید</li>
+        </ul></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-header" onclick="toggleAcc(this)">مشکل با Session <span class="acc-arrow">▾</span></button>
+        <div class="acc-body"><ul>
+          <li>فایل Session موجود را حذف کنید</li>
+          <li>Setup را با دستور <code>python main.py --setup</code> دوباره اجرا کنید</li>
+          <li>از حساب تلگرام خود در برنامه رسمی تلگرام خارج نشده باشید</li>
+        </ul></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-header" onclick="toggleAcc(this)">AI کار نمی‌کند <span class="acc-arrow">▾</span></button>
+        <div class="acc-body"><ul>
+          <li>API Key را بررسی کنید (منقضی نشده باشد)</li>
+          <li>Provider انتخاب‌شده را بررسی کنید</li>
+          <li>Feature AI را از Local Control Tower فعال کنید</li>
+          <li>اتصال اینترنت را بررسی کنید</li>
+        </ul></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-header" onclick="toggleAcc(this)">Local Control Tower باز نمی‌شود <span class="acc-arrow">▾</span></button>
+        <div class="acc-body"><ul>
+          <li>مطمئن شوید ONYX در حال اجرا است</li>
+          <li>آدرسی که در Terminal نمایش داده شده را استفاده کنید</li>
+          <li>Log‌های ONYX را بررسی کنید</li>
+          <li>تنظیمات Local Server را از Setup بررسی کنید</li>
+        </ul></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-header" onclick="toggleAcc(this)">Update پروژه <span class="acc-arrow">▾</span></button>
+        <div class="acc-body"><ul>
+          <li>داخل پوشه پروژه بروید</li>
+          <li>دستور <code>git pull</code> را اجرا کنید</li>
+          <li>در صورت نیاز Dependency‌ها را دوباره نصب کنید</li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="container">
+    <span class="section-label">سوالات متداول</span>
+    <h2 class="section-title">پرسش‌های رایج</h2>
+    <div class="faq-grid">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">ONYX SELF چیست؟ <span class="faq-arr">▾</span></button>
+        <div class="faq-a">ONYX SELF یک سلف‌بات قابل شخصی‌سازی برای تلگرام است. مجموعه‌ای از ابزارهای مدیریتی، اتوماسیون، CRM، هوش مصنوعی و امنیت شخصی را در یک محیط واحد فراهم می‌کند.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">آیا رایگان است؟ <span class="faq-arr">▾</span></button>
+        <div class="faq-a">سورس‌کد پروژه به‌صورت عمومی در GitHub در دسترس است. برای اطلاعات بیشتر به مخزن GitHub پروژه مراجعه کنید.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">آیا به Bot Token نیاز دارد؟ <span class="faq-arr">▾</span></button>
+        <div class="faq-a">خیر. ONYX SELF یک سلف‌بات است و با API رسمی تلگرام کار می‌کند. به Bot Token نیازی ندارد.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">API ID و API HASH را از کجا بگیرم؟ <span class="faq-arr">▾</span></button>
+        <div class="faq-a">از سایت رسمی my.telegram.org می‌توانید آن‌ها را دریافت کنید. راهنمای کامل در بخش «آموزش دریافت API» همین صفحه موجود است.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">آیا اطلاعات من داخل GitHub ذخیره می‌شود؟ <span class="faq-arr">▾</span></button>
+        <div class="faq-a">خیر. هیچ اطلاعات حساسی داخل سورس‌کد قرار نمی‌گیرد. اطلاعات شما در Setup Wizard وارد و روی سیستم شخصی خودتان نگهداری می‌شوند.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">آیا بدون AI API کار می‌کند؟ <span class="faq-arr">▾</span></button>
+        <div class="faq-a">بله. قابلیت‌های AI اختیاری هستند. سیستم بدون AI API نیز به‌خوبی کار می‌کند.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">چطور تنظیمات را دوباره انجام دهم؟ <span class="faq-arr">▾</span></button>
+        <div class="faq-a">با دستور <code>python main.py --setup</code> می‌توانید Setup Wizard را مجدداً اجرا کنید.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">آیا روی گوشی اجرا می‌شود؟ <span class="faq-arr">▾</span></button>
+        <div class="faq-a">بله. با نصب Termux روی Android می‌توانید ONYX را روی گوشی اجرا کنید.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">آیا می‌توان قابلیت‌ها را خاموش کرد؟ <span class="faq-arr">▾</span></button>
+        <div class="faq-a">بله. هر قابلیت را می‌توان از Local Control Tower جداگانه فعال یا غیرفعال کرد.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Local Control Tower چیست؟ <span class="faq-arr">▾</span></button>
+        <div class="faq-a">رابط کاربری محلی ONYX است که امکان مدیریت، مانیتورینگ و تنظیم تمام بخش‌های سیستم را فراهم می‌کند.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">چطور پروژه را Update کنم؟ <span class="faq-arr">▾</span></button>
+        <div class="faq-a">داخل پوشه پروژه بروید و دستور <code>git pull</code> را اجرا کنید.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- GITHUB -->
+<section id="github">
+  <div class="container">
+    <span class="section-label">GitHub</span>
+    <h2 class="section-title" style="margin-bottom:2rem;">ONYX SELF در GitHub</h2>
+    <div class="github-card">
+      <div>
+        <h3 style="color:#fff;font-size:1.3rem;margin-bottom:0.5rem;">سورس‌کد کامل</h3>
+        <p style="margin-bottom:1rem;">پروژه ONYX SELF به‌صورت عمومی در GitHub در دسترس است.</p>
+        <ul class="gh-features">
+          <li>سورس‌کد کامل پروژه</li>
+          <li>آموزش نصب و راه‌اندازی</li>
+          <li>مستندات و تغییرات</li>
+          <li>به‌روزرسانی‌های جدید</li>
+          <li>گزارش Issues</li>
+        </ul>
+        <a href="https://github.com/ONYXSELFBOT/ONYX-SELF-TELEGRAM" target="_blank" class="btn btn-primary">مشاهده پروژه در GitHub ↗</a>
+      </div>
+      <div class="gh-right">
+        <div class="gh-clone">
+          <pre style="color:#6e7681;font-size:0.75rem;margin-bottom:0.5rem;"># Clone Project</pre>
+          <pre>git clone https://github.com/<br>ONYXSELFBOT/ONYX-SELF-TELEGRAM.git</pre>
+        </div>
+        <button class="copy-btn" style="margin-top:0.75rem;width:100%;justify-content:center;" onclick="navigator.clipboard.writeText('git clone https://github.com/ONYXSELFBOT/ONYX-SELF-TELEGRAM.git');this.textContent='✓ کپی شد';this.classList.add('copied');setTimeout(()=>{this.textContent='📋 کپی دستور Clone';this.classList.remove('copied');},2000)">📋 کپی دستور Clone</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-card">
+      <span class="section-label" style="display:block;margin-bottom:0.75rem;">نسخه سفارشی</span>
+      <h2>نسخه‌های اختصاصی ONYX</h2>
+      <p>اگر به نسخه شخصی‌سازی‌شده با قابلیت‌های اختصاصی و متناسب با نیاز خود نیاز دارید، می‌توانید برای مشاوره و استعلام با ما در ارتباط باشید.</p>
+      <a href="https://t.me/Reyvoxe" target="_blank" class="tg-link">✈ ارتباط از طریق تلگرام — @Reyvoxe</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <h3>⬡ ONYX SELF</h3>
+        <p>Telegram Self Automation & Intelligence Platform</p>
+      </div>
+      <div class="footer-links">
+        <h4>پروژه</h4>
+        <ul>
+          <li><a href="https://github.com/ONYXSELFBOT/ONYX-SELF-TELEGRAM" target="_blank">GitHub</a></li>
+          <li><a href="https://t.me/Reyvoxe" target="_blank">تلگرام</a></li>
+          <li><a href="#install">راهنمای نصب</a></li>
+          <li><a href="#faq">سوالات متداول</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>بخش‌ها</h4>
+        <ul>
+          <li><a href="#security">امنیت</a></li>
+          <li><a href="#telegram-api">API تلگرام</a></li>
+          <li><a href="#features">قابلیت‌ها</a></li>
+          <li><a href="#troubleshoot">رفع مشکل</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© ONYX SELF — Telegram Self Automation & Intelligence Platform</p>
+      <p style="color:#1e293b;">Open Source Project</p>
+    </div>
+  </div>
+</footer>
+
+<!-- SCROLL TOP -->
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="بازگشت به بالا">↑</button>
+
+<script>
+// ===== CANVAS BACKGROUND =====
+(function() {
+  const canvas = document.getElementById('bg-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced) { canvas.style.display = 'none'; return; }
+
+  const symbols = ['</>','{}',' []','()','$>','_','#','✈','>>','&&','||','git','def','fn','//','/*','*/','api','[]','==','!=','->','=>','__','??'];
+  const particles = [];
+  const PARTICLE_COUNT = window.innerWidth < 640 ? 18 : 35;
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function rand(a, b) { return a + Math.random() * (b - a); }
+
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    particles.push({
+      x: rand(0, canvas.width),
+      y: rand(0, canvas.height),
+      symbol: symbols[Math.floor(Math.random() * symbols.length)],
+      size: rand(9, 14),
+      speed: rand(0.15, 0.45),
+      opacity: rand(0.04, 0.14),
+      drift: rand(-0.08, 0.08)
+    });
+  }
+
+  let frame = 0;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // subtle grid
+    ctx.strokeStyle = 'rgba(36,129,204,0.04)';
+    ctx.lineWidth = 1;
+    const gs = 80;
+    for (let x = 0; x < canvas.width; x += gs) {
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+    }
+    for (let y = 0; y < canvas.height; y += gs) {
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+    }
+
+    // symbols
+    particles.forEach(p => {
+      ctx.globalAlpha = p.opacity;
+      ctx.fillStyle = '#2481cc';
+      ctx.font = `${p.size}px monospace`;
+      ctx.fillText(p.symbol, p.x, p.y);
+      p.y -= p.speed;
+      p.x += p.drift;
+      if (p.y < -30) { p.y = canvas.height + 20; p.x = rand(0, canvas.width); }
+      if (p.x < -50) p.x = canvas.width + 20;
+      if (p.x > canvas.width + 50) p.x = -20;
+    });
+
+    ctx.globalAlpha = 1;
+    frame++;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ===== NAVBAR =====
+const menuToggle = document.getElementById('menu-toggle');
+const mobileMenu = document.getElementById('mobile-menu');
+menuToggle.addEventListener('click', () => {
+  const open = mobileMenu.classList.toggle('open');
+  menuToggle.setAttribute('aria-expanded', open);
+  menuToggle.textContent = open ? '✕' : '☰';
+});
+
+// Close mobile menu on link click
+mobileMenu.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    mobileMenu.classList.remove('open');
+    menuToggle.textContent = '☰';
+    menuToggle.setAttribute('aria-expanded', false);
+  });
+});
+
+// Active nav highlight
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+function updateNav() {
+  const scrollY = window.scrollY + 100;
+  sections.forEach(sec => {
+    if (scrollY >= sec.offsetTop && scrollY < sec.offsetTop + sec.offsetHeight) {
+      navLinks.forEach(l => {
+        l.classList.remove('active');
+        if (l.getAttribute('href') === '#' + sec.id) l.classList.add('active');
+      });
+    }
+  });
+}
+window.addEventListener('scroll', updateNav, { passive: true });
+
+// ===== SCROLL TOP =====
+const scrollTopBtn = document.getElementById('scrollTop');
+window.addEventListener('scroll', () => {
+  scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
+}, { passive: true });
+
+// ===== TABS =====
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    const panel = document.getElementById('tab-' + btn.dataset.tab);
+    if (panel) panel.classList.add('active');
+  });
+});
+
+// ===== ACCORDION =====
+function toggleAcc(btn) {
+  const item = btn.closest('.acc-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.acc-item.open').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+// ===== FAQ =====
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+// ===== COPY CODE =====
+function copyCode(btn) {
+  const pre = btn.closest('.code-block').querySelector('pre');
+  let text = '';
+  const cmd = pre.querySelector('.cmd');
+  if (cmd && cmd.dataset.code) {
+    text = cmd.dataset.code;
+  } else {
+    text = pre.innerText.replace(/^\$ /, '').trim();
+  }
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ کپی شد';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '📋 کپی'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+</script>
+</body>
+</html>
